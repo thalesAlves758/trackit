@@ -1,6 +1,9 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ThreeDots } from  'react-loader-spinner';
 import axios from 'axios';
+
+import UserContext from '../contexts/UserContext';
 
 import Container from './layout/Container';
 import LogoContainer from './layout/LogoContainer';
@@ -12,6 +15,10 @@ import StyledLink from './layout/StyledLink';
 import logo from '../assets/img/logo.png';
 
 function Login() {
+  const navigate = useNavigate();
+
+  const { setUser } = useContext(UserContext);
+
   const [isLoading, setIsLoading] = useState(false);
   const [form, setForm] = useState({
     email: '',
@@ -24,8 +31,8 @@ function Login() {
     axios
       .post(URL, form)
       .then(({ data }) => {
-        alert("Sucesso! Olhe o console");
-        console.log(data);
+        setUser(data);
+        navigate('/hoje');
       })
       .catch(error => alert(error.response.data.message))
       .finally(() => setIsLoading(false));
