@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { ThreeDots } from  'react-loader-spinner';
+import axios from 'axios';
 
 import logo from '../assets/img/logo.png';
 
@@ -12,9 +13,24 @@ function Login() {
     password: '',
   });
 
+  function logIn() {
+    const URL = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login';
+
+    axios
+      .post(URL, form)
+      .then(({ data }) => {
+        alert("Sucesso! Olhe o console");
+        console.log(data);
+      })
+      .catch(error => alert(error.response.data.message))
+      .finally(() => setIsLoading(false));
+  }
+
   function handleSubmit(event) {
     event.preventDefault();
     setIsLoading(true);
+
+    logIn();
   }
 
   function handleForm(event) {
