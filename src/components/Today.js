@@ -1,6 +1,8 @@
+import Header from "./Header";
+
 function Today() {
   return (
-    <h1>hello</h1>
+    <Header />
   );
 }
 
