@@ -1,4 +1,4 @@
-import Header from "./Header";
+import Header from "./shared/Header";
 
 function Today() {
   return (
