@@ -7,10 +7,18 @@ import logo from '../assets/img/logo.png';
 
 function Login() {
   const [isLoading, setIsLoading] = useState(false);
+  const [form, setForm] = useState({
+    email: '',
+    password: '',
+  });
 
   function handleSubmit(event) {
     event.preventDefault();
     setIsLoading(true);
+  }
+
+  function handleForm(event) {
+    setForm({ ...form, [event.target.name]: event.target.value });
   }
 
   return (
@@ -20,8 +28,25 @@ function Login() {
       </LogoContainer>
 
       <Form onSubmit={handleSubmit}>
-        <InputForm required type="email" placeholder='email' disabled={isLoading} />
-        <InputForm required type="password" placeholder='senha' disabled={isLoading} />
+        <InputForm
+          required
+          type="email"
+          placeholder='email'
+          name='email'
+          disabled={isLoading}
+          value={form.email}
+          onChange={handleForm}
+        />
+        <InputForm
+          required
+          type="password"
+          placeholder='senha'
+          name='password'
+          disabled={isLoading}
+          value={form.password}
+          onChange={handleForm}
+        />
+
         <Button type='submit' disabled={isLoading}>
           { isLoading ? <ThreeDots color="white" height="14" width="50" /> : 'Entrar' }
         </Button>
@@ -69,10 +94,6 @@ const InputForm = styled.input`
 
   :disabled {
     background-color: var(--anti-flash-white);
-    
-    ::placeholder {
-      color: var(--silver-foil);
-    }
   }
 `;
 
