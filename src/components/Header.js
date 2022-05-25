@@ -1,10 +1,15 @@
+import { useContext } from 'react';
 import styled from 'styled-components';
 
+import UserContext from '../contexts/UserContext';
+
 function Header() {
+  const { user: { image } } = useContext(UserContext);
+
   return (
     <HeaderContainer>
       <h1>TrackIt</h1>
-      <img src="" alt="Foto de perfil" />
+      <img src={image} alt="Foto de perfil" />
     </HeaderContainer>
   );
 }
