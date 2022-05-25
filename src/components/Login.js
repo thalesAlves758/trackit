@@ -1,19 +1,30 @@
-import styled from 'styled-components';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+import { ThreeDots } from  'react-loader-spinner';
 
 import logo from '../assets/img/logo.png';
 
 function Login() {
+  const [isLoading, setIsLoading] = useState(false);
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    setIsLoading(true);
+  }
+
   return (
     <Container>
       <LogoContainer>
         <img src={logo} alt="Logo" />
       </LogoContainer>
 
-      <Form>
-        <InputForm required type="email" placeholder='email' />
-        <InputForm required type="password" placeholder='senha' />
-        <Button type='submit'>Entrar</Button>
+      <Form onSubmit={handleSubmit}>
+        <InputForm required type="email" placeholder='email' disabled={isLoading} />
+        <InputForm required type="password" placeholder='senha' disabled={isLoading} />
+        <Button type='submit' disabled={isLoading}>
+          { isLoading ? <ThreeDots color="white" height="14" width="50" /> : 'Entrar' }
+        </Button>
       </Form>
       <StyledLink to={'/'}>Não tem uma conta? Cadastre-se!</StyledLink>
     </Container>
@@ -55,6 +66,14 @@ const InputForm = styled.input`
   ::placeholder {
     color: var(--gainsboro);
   }
+
+  :disabled {
+    background-color: var(--anti-flash-white);
+    
+    ::placeholder {
+      color: var(--silver-foil);
+    }
+  }
 `;
 
 const Button = styled.button`
@@ -63,11 +82,17 @@ const Button = styled.button`
   background-color: var(--blue-jeans);
   border-radius: 5px;
   font-size: 20px;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   color: var(--white);
 
   :hover {
     cursor: pointer;
+  }
+
+  :disabled {
+    opacity: 0.7;
   }
 `;
 
