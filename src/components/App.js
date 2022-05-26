@@ -8,7 +8,7 @@ import Register from './Register';
 import Today from './Today';
 
 function App() {
-  const [user, setUser] = useState('');
+  const [user, setUser] = useState({});
 
   return (
     <BrowserRouter>
