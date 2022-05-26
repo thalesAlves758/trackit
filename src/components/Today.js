@@ -18,13 +18,30 @@ import MainContent from "./layout/MainContent";
 const ZERO = 0;
 const ONE_HUNDRED = 100;
 
-function CompletedIcon({ done }) {
+function CompletedIcon({ done, toggleHabit }) {
   return (
-    <ion-icon name="checkbox" style={{ color: done ? '#8FC549' : '#EBEBEB' }}></ion-icon>
+    <ion-icon name="checkbox" onClick={toggleHabit} style={{ color: done ? '#8FC549' : '#EBEBEB' }}></ion-icon>
   );
 }
 
 function TodayHabit({ id, name, done, currentSequence, highestSequence }) {
+  const { user } = useContext(UserContext);
+
+  function toggleHabit() {
+    const action = done ? 'uncheck' : 'check';
+
+    const URL = `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}/${action}`;
+
+    axios
+      .post(URL, {}, {
+        headers: {
+          "Authorization": `Bearer ${user.token}`,
+        }
+      })
+      .then(res => console.log(res))
+      .catch(err => console.log(err));
+  }
+
   return (
     <HabitContainer>
       <HabitInfo>
@@ -33,7 +50,7 @@ function TodayHabit({ id, name, done, currentSequence, highestSequence }) {
         <p>Seu recorde: <SequenceInfo green={currentSequence === highestSequence}>{highestSequence} dia(s)</SequenceInfo></p>
       </HabitInfo>
 
-      <CompletedIcon done={done} />
+      <CompletedIcon toggleHabit={toggleHabit} done={done} />
     </HabitContainer>
   );
 }
@@ -42,6 +59,21 @@ function Today() {
   const { user } = useContext(UserContext);
 
   const [todayHabits, setTodayHabits] = useState([]);
+  // const [todayHabits, setTodayHabits] = useState([
+  //   {
+  //     id: 3,
+  //     name: "Acordar",
+  //     done: true,
+  //     currentSequence: 1,
+  //     highestSequence: 1
+  //   }, {
+  //     id: 3,
+  //     name: "Acordar",
+  //     done: true,
+  //     currentSequence: 1,
+  //     highestSequence: 1
+  //   }
+  // ]);
   
   useEffect(() => {
     const URL = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today";
