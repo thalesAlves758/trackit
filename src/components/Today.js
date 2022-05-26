@@ -1,8 +1,12 @@
 import Header from "./shared/Header";
+import Menu from "./shared/Menu";
 
 function Today() {
   return (
-    <Header />
+    <>
+      <Header />
+      <Menu />
+    </>
   );
 }
 
