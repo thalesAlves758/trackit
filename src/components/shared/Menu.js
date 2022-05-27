@@ -1,10 +1,17 @@
+import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import 'react-circular-progressbar/dist/styles.css';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 
+import TodayHabitsContext from "../../contexts/TodayHabitsContext";
+
+import getHabitsPercentage from '../utilities/getHabitsPercentage';
+
 function Menu() {
+  const { todayHabits } = useContext(TodayHabitsContext);
+
   return (
     <Footer>
       <MenuItem to="/habitos">
@@ -13,7 +20,7 @@ function Menu() {
 
       <ProgressBarContainer>
         <CircularProgressbar
-          value={50}
+          value={getHabitsPercentage(todayHabits)}
           text="Hoje"
           styles={buildStyles({
             textSize: '18px',
