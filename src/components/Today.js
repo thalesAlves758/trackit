@@ -133,7 +133,7 @@ function Today() {
               </RenderIf>
 
               <RenderIf isTrue={hasAnyCompletedHabit()}>
-                <Subtitle>
+                <Subtitle hasCompletedHabits="true">
                   {getHabitsPercentage(todayHabits)}% dos hábitos concluídos
                 </Subtitle>
               </RenderIf>
