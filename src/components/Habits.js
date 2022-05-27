@@ -21,15 +21,38 @@ function Day({ selected, name }) {
   );
 }
 
-function Habit({ id, name, days }) {
+function Habit({ id, name, days, habits, setHabits }) {
+  const { user } = useContext(UserContext);
+
   const dayLetters = ["D", "S", "T", "Q", "Q", "S", "S"];
+
+  const canDelete = () => window.confirm("Deseja mesmo excluir este hábito?");
+
+  function deleteThisHabit() {
+    const URL = `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}`;
+
+    axios
+      .delete(URL, {
+        headers: {
+          "Authorization": `Bearer ${user.token}`,
+        }
+      })
+      .then(() => setHabits(habits.filter(habit => habit.id !== id)))
+      .catch(err => console.log(err.response));
+  }
+
+  function handleClick() {
+    if(canDelete()) {
+      deleteThisHabit();
+    }
+  }
 
   function renderDays() {
     return dayLetters.map((day, index) => (
-      <Day name={day} selected={days.includes(index)} />
-    ))
+      <Day key={index} name={day} selected={days.includes(index)} />
+    ));
   }
-  
+
   return (
     <HabitContainer>
       <h2>{name}</h2>
@@ -37,6 +60,10 @@ function Habit({ id, name, days }) {
       <HabitDays>
         { renderDays() }
       </HabitDays>
+
+      <TrashIcon onClick={handleClick}>
+        <ion-icon name="trash-outline"></ion-icon>
+      </TrashIcon>
     </HabitContainer>
   );
 }
@@ -66,6 +93,8 @@ function Habits() {
         id={habit.id}
         name={habit.name}
         days={habit.days}
+        habits={habits}
+        setHabits={setHabits}
       />
     ));
   }
@@ -136,6 +165,20 @@ const DayButton = styled.div`
   font-size: 20px;
   color: ${props => props.selected ? 'var(--white)' : 'var(--gainsboro)'};
   background-color: ${props => props.selected ? 'var(--american-silver)' : 'var(--white)'};
+`;
+
+const TrashIcon = styled.button`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: inherit;
+  border: none;
+  font-size: 18px;
+  color: var(--granite-gray);
+
+  :hover {
+    cursor: pointer;
+  }
 `;
 
 export default Habits;
