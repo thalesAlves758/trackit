@@ -4,6 +4,7 @@ import { useEffect, useState, useContext } from "react";
 import styled from 'styled-components';
 
 import UserContext from "../contexts/UserContext";
+import TodayHabitsContext from "../contexts/TodayHabitsContext";
 
 import Header from "./shared/Header";
 import Menu from "./shared/Menu";
@@ -26,6 +27,22 @@ function CompletedIcon({ done, toggleHabit }) {
 
 function TodayHabit({ id, name, done, currentSequence, highestSequence }) {
   const { user } = useContext(UserContext);
+  const { todayHabits, setTodayHabits } = useContext(TodayHabitsContext);
+
+  function updateHabit() {
+    setTodayHabits(todayHabits.map(habit => {
+      if(habit.id !== id) {
+        return habit;
+      }
+
+      return {
+        ...habit,
+        currentSequence: done ? currentSequence - 1 : currentSequence + 1,
+        highestSequence: currentSequence > highestSequence ? currentSequence : highestSequence,
+        done: !done,
+      };
+    }));
+  }
 
   function toggleHabit() {
     const action = done ? 'uncheck' : 'check';
@@ -38,7 +55,7 @@ function TodayHabit({ id, name, done, currentSequence, highestSequence }) {
           "Authorization": `Bearer ${user.token}`,
         }
       })
-      .then(res => console.log(res))
+      .then(() => updateHabit())
       .catch(err => console.log(err));
   }
 
@@ -57,23 +74,7 @@ function TodayHabit({ id, name, done, currentSequence, highestSequence }) {
 
 function Today() {
   const { user } = useContext(UserContext);
-
-  const [todayHabits, setTodayHabits] = useState([]);
-  // const [todayHabits, setTodayHabits] = useState([
-  //   {
-  //     id: 3,
-  //     name: "Acordar",
-  //     done: true,
-  //     currentSequence: 1,
-  //     highestSequence: 1
-  //   }, {
-  //     id: 3,
-  //     name: "Acordar",
-  //     done: true,
-  //     currentSequence: 1,
-  //     highestSequence: 1
-  //   }
-  // ]);
+  const { todayHabits, setTodayHabits } = useContext(TodayHabitsContext);
   
   useEffect(() => {
     const URL = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today";
