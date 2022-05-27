@@ -16,8 +16,9 @@ import Content from "./layout/Content";
 import TopContent from "./layout/TopContent";
 import MainContent from "./layout/MainContent";
 
+import getHabitsPercentage from "./utilities/getHabitsPercentage";
+
 const ZERO = 0;
-const ONE_HUNDRED = 100;
 
 function CompletedIcon({ done, toggleHabit }) {
   return (
@@ -35,10 +36,13 @@ function TodayHabit({ id, name, done, currentSequence, highestSequence }) {
         return habit;
       }
 
+      const newCurrentSequence = done ? currentSequence - 1 : currentSequence + 1;
+      const newHighestSequence = newCurrentSequence > highestSequence ? newCurrentSequence : highestSequence;
+
       return {
         ...habit,
-        currentSequence: done ? currentSequence - 1 : currentSequence + 1,
-        highestSequence: currentSequence > highestSequence ? currentSequence : highestSequence,
+        currentSequence: newCurrentSequence,
+        highestSequence: newHighestSequence,
         done: !done,
       };
     }));
@@ -97,10 +101,6 @@ function Today() {
 
   const hasAnyCompletedHabit = () => todayHabits.length > ZERO && todayHabits.some(habit => habit.done);
 
-  const getCompletedHabitsAmount = () => todayHabits.reduce((acc, habit) => habit.done ? ++acc : acc, ZERO);
-
-  const getCompletedHabitsPercentage = () => parseInt(getCompletedHabitsAmount() / todayHabits.length * ONE_HUNDRED);
-
   function getTodayHabits() {
     return todayHabits.map(habit => (
       <TodayHabit
@@ -134,7 +134,7 @@ function Today() {
 
               <RenderIf isTrue={hasAnyCompletedHabit()}>
                 <Subtitle>
-                  {getCompletedHabitsPercentage()}% dos hábitos concluídos
+                  {getHabitsPercentage(todayHabits)}% dos hábitos concluídos
                 </Subtitle>
               </RenderIf>
             </Titles>
