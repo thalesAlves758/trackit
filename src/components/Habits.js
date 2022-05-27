@@ -49,7 +49,7 @@ function Habit({ id, name, days, habits, setHabits }) {
 
   const canDelete = () => window.confirm("Deseja mesmo excluir este hábito?");
 
-  function deleteThisHabit() {
+  function deleteHabit() {
     const URL = `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}`;
 
     axios
@@ -64,7 +64,7 @@ function Habit({ id, name, days, habits, setHabits }) {
 
   function handleClick() {
     if(canDelete()) {
-      deleteThisHabit();
+      deleteHabit();
     }
   }
 
