@@ -9,6 +9,8 @@ import TodayHabitsContext from "../../contexts/TodayHabitsContext";
 
 import getHabitsPercentage from '../utilities/getHabitsPercentage';
 
+const ZERO = 0;
+
 function Menu() {
   const { todayHabits } = useContext(TodayHabitsContext);
 
@@ -19,17 +21,19 @@ function Menu() {
       </MenuItem>
 
       <ProgressBarContainer>
-        <CircularProgressbar
-          value={getHabitsPercentage(todayHabits)}
-          text="Hoje"
-          styles={buildStyles({
-            textSize: '18px',
-            backgroundColor: '#52b6ff',
-            textColor: '#ffffff',
-            trailColor: '#52b6ff',
-            pathColor: '#ffffff',
-          })}
-        />
+        <Link to="/hoje">
+          <CircularProgressbar
+            value={getHabitsPercentage(todayHabits) || ZERO}
+            text="Hoje"
+            styles={buildStyles({
+              textSize: '18px',
+              backgroundColor: '#52b6ff',
+              textColor: '#ffffff',
+              trailColor: '#52b6ff',
+              pathColor: '#ffffff',
+            })}
+          />
+        </Link>
       </ProgressBarContainer>
 
       <MenuItem to="/historico">
