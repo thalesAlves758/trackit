@@ -13,6 +13,8 @@ import MainTitle from "./layout/MainTitle";
 import Button from "./layout/Button";
 import MainContent from "./layout/MainContent";
 
+const ZERO = 0;
+
 function Day({ selected, name }) {
   return (
     <DayButton selected={selected}>
@@ -87,6 +89,14 @@ function Habits() {
   }, []);
 
   function getHabits() {
+    if(habits.length === ZERO) {
+      return (
+        <NoHabits>
+          Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!
+        </NoHabits>
+      );
+    }
+
     return habits.map(habit => (
       <Habit
         key={habit.id}
@@ -179,6 +189,12 @@ const TrashIcon = styled.button`
   :hover {
     cursor: pointer;
   }
+`;
+
+const NoHabits = styled.div`
+  color: var(--granite-gray);
+  font-size: 18px;
+  line-height: 22px;
 `;
 
 export default Habits;
