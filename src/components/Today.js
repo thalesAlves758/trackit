@@ -1,6 +1,6 @@
 import axios from "axios";
 import dayjs from "dayjs";
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useContext } from "react";
 import styled from 'styled-components';
 
 import UserContext from "../contexts/UserContext";
