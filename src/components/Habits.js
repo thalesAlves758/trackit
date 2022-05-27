@@ -24,7 +24,6 @@ function Day({ clickable = false, selected, name, index, handleCheck = null }) {
   return (
     <DayCheckbox selected={selected} onClick={clickable ? () => handleCheck(index) : null}>
       { name }
-      <input type="checkbox" name="days" value={index} defaultChecked={selected} />
     </DayCheckbox>
   );
 }
@@ -260,10 +259,6 @@ const DayCheckbox = styled.div`
   font-size: 20px;
   color: ${props => props.selected ? 'var(--white)' : 'var(--gainsboro)'};
   background-color: ${props => props.selected ? 'var(--american-silver)' : 'var(--white)'};
-
-  input {
-    display: none;
-  }
 `;
 
 const FormButtons = styled.div`
