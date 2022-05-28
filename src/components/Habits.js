@@ -84,12 +84,14 @@ function Habit({ id, name, days, habits, setHabits }) {
 }
 
 function NewHabitForm({ cancel, habits, setHabits }) {
-  const { user } = useContext(UserContext);
-
-  const [form, setForm] = useState({
+  const initialForm = {
     name: '',
     days: [],
-  });
+  };
+
+  const { user } = useContext(UserContext);
+
+  const [form, setForm] = useState(initialForm);
   const [isLoading, setIsLoading] = useState(false);
 
   function toggleDay(value) {
@@ -101,6 +103,11 @@ function NewHabitForm({ cancel, habits, setHabits }) {
     }
 
     setForm({ ...form, days: [...days, value].sort() })
+  }
+
+  function resetFields() {
+    setForm(initialForm);
+    cancel();
   }
 
   function createHabit() {
@@ -117,6 +124,7 @@ function NewHabitForm({ cancel, habits, setHabits }) {
       .then(({ data }) => {
         setHabits([...habits, data]);
         setIsLoading(false);
+        resetFields();
       })
       .catch(err => console.log(err.response));
   }
