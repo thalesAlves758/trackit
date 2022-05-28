@@ -15,13 +15,18 @@ import TopContent from "./layout/TopContent";
 
 import Header from "./shared/Header";
 import Menu from "./shared/Menu";
+import RenderIf from './utilities/RenderIf';
+
 import axios from 'axios';
 import dayjs from 'dayjs';
+
+const ZERO = 0;
 
 function History() {
   const { user } = useContext(UserContext);
 
   const [habitsHistory, setHabitsHistory] = useState([]);
+  const [selectedHabits, setSelectedHabits] = useState([]);
 
   useEffect(() => {
     const URL = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/history/daily";
@@ -38,8 +43,10 @@ function History() {
 
   const hasDate = date => habitsHistory.some(habit => habit.day === dayjs(date).format("DD/MM/YYYY"));
 
+  const getHistoryByDate = date => habitsHistory.find(habit => habit.day === dayjs(date).format("DD/MM/YYYY"));
+
   function completedAllHabits(date) {
-    const { habits } = habitsHistory.find(habit => habit.day === dayjs(date).format("DD/MM/YYYY"));
+    const { habits } = getHistoryByDate(date);
 
     return habits.every(habit => habit.done);
   }
@@ -60,6 +67,24 @@ function History() {
     );
   }
 
+  function renderDateHabits() {
+    return selectedHabits.map(habit => (
+      <DayHabit key={habit.id} done={habit.done}>{habit.name}</DayHabit>
+    ));
+  }
+
+  function handleClickDay(value) {
+    const dayHistory = getHistoryByDate(value);
+
+    if(!dayHistory) {
+      return;
+    }
+
+    setSelectedHabits([...dayHistory.habits]);
+  }
+
+  const closeModal = () => setSelectedHabits([]);
+
   return (
     <>
       <Header />
@@ -73,12 +98,27 @@ function History() {
           </TopContent>
 
           <MainContent>
-            <Calendar formatDay={getDay} />
+            <Calendar formatDay={getDay} onClickDay={handleClickDay} />
           </MainContent>
         </Content>
       </Main>
 
       <Menu />
+
+      <RenderIf isTrue={selectedHabits.length > ZERO}>
+        <Modal>
+          <ModalContent>
+            <ModalTop>
+              Hábitos
+              <ion-icon onClick={closeModal} name="close-outline"></ion-icon>
+            </ModalTop>
+
+            <DayHabits>
+              { renderDateHabits() }
+            </DayHabits>
+          </ModalContent>
+        </Modal>
+      </RenderIf>
     </>
   );
 }
@@ -96,6 +136,62 @@ const Day = styled.div`
 
 const DayWithoutBackground = styled(Day)`
   background-color: inherit;
+`;
+
+const Modal = styled.div`
+  z-index: 2;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 46px;
+  overflow-y: scroll;
+`;
+
+const ModalContent = styled.div`
+  width: 336px;
+  background-color: var(--white);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 6px;
+`;
+
+const ModalTop = styled.div`
+  width: 100%;
+  border-radius: 6px;
+  margin-bottom: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  ion-icon {
+    font-size: 30px;
+
+    :hover {
+      cursor: pointer;
+    }
+  }
+`;
+
+const DayHabits = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+`;
+
+const DayHabit = styled.div`
+  padding: 16px;
+  width: 100%;
+  border-radius: 6px;
+  background-color: ${props => props.done ? '#8cc654' : '#ea5766'};
 `;
 
 export default History;
