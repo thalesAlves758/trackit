@@ -123,10 +123,10 @@ function NewHabitForm({ cancel, habits, setHabits }) {
       })
       .then(({ data }) => {
         setHabits([...habits, data]);
-        setIsLoading(false);
         resetFields();
       })
-      .catch(err => console.log(err.response));
+      .catch(err => alert(err.response.data.message))
+      .finally(() => setIsLoading(false));
   }
 
   function handleSubmit(event) {
