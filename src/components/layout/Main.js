@@ -11,6 +11,7 @@ const Main = styled.main`
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow-y: scroll;
 `;
 
 export default Main;
