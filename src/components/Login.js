@@ -14,6 +14,8 @@ import StyledLink from './layout/StyledLink';
 
 import logo from '../assets/img/logo.png';
 
+import localStorageHelper from './utilities/localStorageHelper';
+
 function Login() {
   const navigate = useNavigate();
 
@@ -32,6 +34,9 @@ function Login() {
       .post(URL, form)
       .then(({ data }) => {
         setUser(data);
+
+        localStorageHelper.set('user', data);
+        
         navigate('/hoje');
       })
       .catch(error => alert(error.response.data.message))
