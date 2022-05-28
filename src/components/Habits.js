@@ -81,7 +81,9 @@ function Habit({ id, name, days, habits, setHabits }) {
   );
 }
 
-function NewHabitForm({ cancel }) {
+function NewHabitForm({ cancel, habits, setHabits }) {
+  const { user } = useContext(UserContext);
+
   const [form, setForm] = useState({
     name: '',
     days: [],
@@ -98,8 +100,27 @@ function NewHabitForm({ cancel }) {
     setForm({ ...form, days: [...days, value].sort() })
   }
 
+  function createHabit() {
+    const URL = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits";
+
+    axios
+      .post(URL, form, {
+        headers: {
+          "Authorization": `Bearer ${user.token}`,
+        }
+      })
+      .then(({ data }) => setHabits([...habits, data]))
+      .catch(err => console.log(err.response));
+  }
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    
+    createHabit();
+  }
+
   return (
-    <HabitForm>
+    <HabitForm onSubmit={handleSubmit}>
       <InputForm
         required
         type="text"
@@ -180,7 +201,7 @@ function Habits() {
           </TopContent>
 
           <RenderIf isTrue={showForm}>
-            <NewHabitForm cancel={() => setShowForm(false)} />
+            <NewHabitForm cancel={() => setShowForm(false)} habits={habits} setHabits={setHabits} />
           </RenderIf>
 
           <MainContent>
