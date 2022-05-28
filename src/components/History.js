@@ -1,8 +1,10 @@
+import 'react-calendar/dist/Calendar.css';
+import Calendar from 'react-calendar';
+
 import Content from "./layout/Content";
 import Main from "./layout/Main";
 import MainContent from "./layout/MainContent";
 import MainTitle from "./layout/MainTitle";
-import NoContentMessage from './layout/NoContentMessage';
 import TopContent from "./layout/TopContent";
 
 import Header from "./shared/Header";
@@ -22,9 +24,7 @@ function History() {
           </TopContent>
 
           <MainContent>
-            <NoContentMessage>
-              Em breve você poderá ver o histórico dos seus hábitos aqui!
-            </NoContentMessage>
+            <Calendar />
           </MainContent>
         </Content>
       </Main>
