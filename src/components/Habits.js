@@ -83,30 +83,24 @@ function Habit({ id, name, days, habits, setHabits }) {
   );
 }
 
-function NewHabitForm({ cancel, habits, setHabits }) {
-  const initialForm = {
-    name: '',
-    days: [],
-  };
-
+function NewHabitForm({ cancel, habits, setHabits, newHabit, setNewHabit, resetNewHabit }) {
   const { user } = useContext(UserContext);
 
-  const [form, setForm] = useState(initialForm);
   const [isLoading, setIsLoading] = useState(false);
 
   function toggleDay(value) {
-    const { days } = form;
+    const { days } = newHabit;
 
     if(days.includes(value)) {
-      setForm({ ...form, days: days.filter(day => day !== value)})
+      setNewHabit({ ...newHabit, days: days.filter(day => day !== value)})
       return;
     }
 
-    setForm({ ...form, days: [...days, value].sort() })
+    setNewHabit({ ...newHabit, days: [...days, value].sort() })
   }
 
   function resetFields() {
-    setForm(initialForm);
+    resetNewHabit();
     cancel();
   }
 
@@ -116,7 +110,7 @@ function NewHabitForm({ cancel, habits, setHabits }) {
     setIsLoading(true);
 
     axios
-      .post(URL, form, {
+      .post(URL, newHabit, {
         headers: {
           "Authorization": `Bearer ${user.token}`,
         }
@@ -143,11 +137,11 @@ function NewHabitForm({ cancel, habits, setHabits }) {
         placeholder="nome do hábito"
         name="name"
         disabled={isLoading}
-        value={form.name}
-        onChange={event => setForm({...form, name: event.target.value})}
+        value={newHabit.name}
+        onChange={event => setNewHabit({...newHabit, name: event.target.value})}
       />
 
-      <Days clickable={!isLoading} handleCheck={toggleDay} selectedDays={form.days} />
+      <Days clickable={!isLoading} handleCheck={toggleDay} selectedDays={newHabit.days} />
 
       <FormButtons>
         <SecondaryButton onClick={cancel} disabled={isLoading}>
@@ -162,8 +156,14 @@ function NewHabitForm({ cancel, habits, setHabits }) {
 }
 
 function Habits() {
+  const initialNewHabit = {
+    name: '',
+    days: [],
+  };
+
   const [showForm, setShowForm] = useState(false);
   const [habits, setHabits] = useState([]);
+  const [newHabit, setNewHabit] = useState(initialNewHabit);
 
   const { user } = useContext(UserContext);
 
@@ -218,7 +218,14 @@ function Habits() {
           </TopContent>
 
           <RenderIf isTrue={showForm}>
-            <NewHabitForm cancel={() => setShowForm(false)} habits={habits} setHabits={setHabits} />
+            <NewHabitForm
+              cancel={() => setShowForm(false)}
+              habits={habits}
+              setHabits={setHabits}
+              newHabit={newHabit}
+              setNewHabit={setNewHabit}
+              resetNewHabit={() => setNewHabit(initialNewHabit)}
+            />
           </RenderIf>
 
           <MainContent>
