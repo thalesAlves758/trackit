@@ -8,6 +8,7 @@ import Login from './Login';
 import Register from './Register';
 import Today from './Today';
 import Habits from './Habits';
+import History from './History';
 
 function App() {
   const [user, setUser] = useState({});
@@ -23,6 +24,7 @@ function App() {
             <Route path='/cadastro' element={<Register />} />
             <Route path='/hoje' element={<Today />} />
             <Route path='/habitos' element={<Habits />} />
+            <Route path='/historico' element={<History />} />
           </Routes>
           
         </TodayHabitsContext.Provider>
