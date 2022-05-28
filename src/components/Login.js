@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ThreeDots } from  'react-loader-spinner';
 import axios from 'axios';
@@ -26,6 +26,15 @@ function Login() {
     email: '',
     password: '',
   });
+
+  useEffect(() => {
+    const userLocalStorage = localStorageHelper.get('user');
+    
+    if(userLocalStorage) {
+      setUser(userLocalStorage);
+      navigate('/hoje');
+    }
+  }, []);
 
   function logIn() {
     const URL = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login';
