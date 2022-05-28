@@ -19,6 +19,7 @@ import InputForm from "./layout/InputForm";
 import SecondaryButton from "./layout/SecondaryButton";
 
 import RenderIf from './utilities/RenderIf';
+import NoContentMessage from "./layout/NoContentMessage";
 
 const ZERO = 0;
 
@@ -183,9 +184,9 @@ function Habits() {
   function getHabits() {
     if(habits.length === ZERO) {
       return (
-        <NoHabits>
+        <NoContentMessage>
           Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!
-        </NoHabits>
+        </NoContentMessage>
       );
     }
 
@@ -279,12 +280,6 @@ const TrashIcon = styled.button`
   :hover {
     cursor: pointer;
   }
-`;
-
-const NoHabits = styled.div`
-  color: var(--granite-gray);
-  font-size: 18px;
-  line-height: 22px;
 `;
 
 const HabitForm = styled(Form)`
