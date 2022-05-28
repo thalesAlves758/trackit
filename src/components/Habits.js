@@ -2,6 +2,8 @@ import { useState, useEffect, useContext } from "react";
 import styled from 'styled-components';
 import axios from "axios";
 
+import { ThreeDots } from  'react-loader-spinner';
+
 import UserContext from "../contexts/UserContext";
 
 import Content from "./layout/Content";
@@ -88,6 +90,7 @@ function NewHabitForm({ cancel, habits, setHabits }) {
     name: '',
     days: [],
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   function toggleDay(value) {
     const { days } = form;
@@ -103,13 +106,18 @@ function NewHabitForm({ cancel, habits, setHabits }) {
   function createHabit() {
     const URL = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits";
 
+    setIsLoading(true);
+
     axios
       .post(URL, form, {
         headers: {
           "Authorization": `Bearer ${user.token}`,
         }
       })
-      .then(({ data }) => setHabits([...habits, data]))
+      .then(({ data }) => {
+        setHabits([...habits, data]);
+        setIsLoading(false);
+      })
       .catch(err => console.log(err.response));
   }
 
@@ -126,18 +134,19 @@ function NewHabitForm({ cancel, habits, setHabits }) {
         type="text"
         placeholder="nome do hábito"
         name="name"
+        disabled={isLoading}
         value={form.name}
         onChange={event => setForm({...form, name: event.target.value})}
       />
 
-      <Days clickable={true} handleCheck={toggleDay} selectedDays={form.days} />
+      <Days clickable={!isLoading} handleCheck={toggleDay} selectedDays={form.days} />
 
       <FormButtons>
-        <SecondaryButton onClick={cancel}>
+        <SecondaryButton onClick={cancel} disabled={isLoading}>
           Cancelar
         </SecondaryButton>
-        <Button>
-          Salvar
+        <Button type='submit' disabled={isLoading}>
+          { isLoading ? <ThreeDots color="white" height="14" width="50" /> : 'Salvar' }
         </Button>
       </FormButtons>
     </HabitForm>
