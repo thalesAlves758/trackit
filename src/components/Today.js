@@ -163,6 +163,7 @@ const Subtitle = styled.div`
 `;
 
 const HabitContainer = styled.div`
+  width: 100%;
   height: 94px;
   background-color: var(--white);
   border-radius: 5px;

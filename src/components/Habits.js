@@ -248,6 +248,7 @@ const CustomButton = styled(Button)`
 
 const HabitContainer = styled.div`
   background-color: var(--white);
+  width: 100%;
   height: 90px;
   border-radius: 5px;
   position: relative;
