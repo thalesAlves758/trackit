@@ -2,6 +2,7 @@ import 'react-calendar/dist/Calendar.css';
 import Calendar from 'react-calendar';
 
 import { useState, useEffect, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import styled from 'styled-components';
 
@@ -16,6 +17,7 @@ import TopContent from "./layout/TopContent";
 import Header from "./shared/Header";
 import Menu from "./shared/Menu";
 import RenderIf from './utilities/RenderIf';
+import localStorageHelper from './utilities/localStorageHelper';
 
 import axios from 'axios';
 import dayjs from 'dayjs';
@@ -23,18 +25,39 @@ import dayjs from 'dayjs';
 const ZERO = 0;
 
 function History() {
-  const { user } = useContext(UserContext);
+  const navigate = useNavigate();
+
+  const { user, setUser } = useContext(UserContext);
 
   const [habitsHistory, setHabitsHistory] = useState([]);
   const [selectedHabits, setSelectedHabits] = useState([]);
 
+  function checkUser() {
+    if(!user.email) {
+      const userLocalStorage = localStorageHelper.get('user');
+
+      if(userLocalStorage) {
+        setUser(userLocalStorage);
+        return;
+      }
+
+      navigate('/');
+    }
+  }
+
   useEffect(() => {
+    checkUser();
+    
     const URL = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/history/daily";
+
+    const hasUserInLocalstorage = () => localStorageHelper.get('user') !== null;
+
+    const userToken = user.token || hasUserInLocalstorage() ? localStorageHelper.get('user').token : '';
 
     axios
       .get(URL, {
         headers: {
-          "Authorization": `Bearer ${user.token}`
+          "Authorization": `Bearer ${userToken}`
         }
       })
       .then(({ data }) => setHabitsHistory(data))

@@ -19,7 +19,9 @@ import InputForm from "./layout/InputForm";
 import SecondaryButton from "./layout/SecondaryButton";
 
 import RenderIf from './utilities/RenderIf';
+import localStorageHelper from './utilities/localStorageHelper';
 import NoContentMessage from "./layout/NoContentMessage";
+import { useNavigate } from "react-router-dom";
 
 const ZERO = 0;
 
@@ -157,6 +159,8 @@ function NewHabitForm({ cancel, habits, setHabits, newHabit, setNewHabit, resetN
 }
 
 function Habits() {
+  const navigate = useNavigate();
+
   const initialNewHabit = {
     name: '',
     days: [],
@@ -166,15 +170,34 @@ function Habits() {
   const [habits, setHabits] = useState([]);
   const [newHabit, setNewHabit] = useState(initialNewHabit);
 
-  const { user } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
+
+  function checkUser() {
+    if(!user.email) {
+      const userLocalStorage = localStorageHelper.get('user');
+
+      if(userLocalStorage) {
+        setUser(userLocalStorage);
+        return;
+      }
+
+      navigate('/');
+    }
+  }
 
   useEffect(() => {
+    checkUser();
+    
     const URL = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits";
+
+    const hasUserInLocalstorage = () => localStorageHelper.get('user') !== null;
+
+    const userToken = user.token || hasUserInLocalstorage() ? localStorageHelper.get('user').token : '';
 
     axios
       .get(URL, {
         headers: {
-          "Authorization": `Bearer ${user.token}`
+          "Authorization": `Bearer ${userToken}`
         }
       })
       .then(({ data }) => setHabits(data))

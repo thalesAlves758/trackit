@@ -2,6 +2,7 @@ import axios from "axios";
 import dayjs from "dayjs";
 import { useEffect, useContext } from "react";
 import styled from 'styled-components';
+import { useNavigate } from "react-router-dom";
 
 import UserContext from "../contexts/UserContext";
 import TodayHabitsContext from "../contexts/TodayHabitsContext";
@@ -17,6 +18,7 @@ import TopContent from "./layout/TopContent";
 import MainContent from "./layout/MainContent";
 
 import getHabitsPercentage from "./utilities/getHabitsPercentage";
+import localStorageHelper from './utilities/localStorageHelper';
 
 const ZERO = 0;
 
@@ -77,16 +79,37 @@ function TodayHabit({ id, name, done, currentSequence, highestSequence }) {
 }
 
 function Today() {
-  const { user } = useContext(UserContext);
+  const navigate = useNavigate();
+
+  const { user, setUser } = useContext(UserContext);
   const { todayHabits, setTodayHabits } = useContext(TodayHabitsContext);
+
+  function checkUser() {
+    if(!user.email) {
+      const userLocalStorage = localStorageHelper.get('user');
+
+      if(userLocalStorage) {
+        setUser(userLocalStorage);
+        return;
+      }
+
+      navigate('/');
+    }
+  }
   
   useEffect(() => {
+    checkUser();
+
     const URL = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today";
-    
+
+    const hasUserInLocalstorage = () => localStorageHelper.get('user') !== null;
+
+    const userToken = user.token || hasUserInLocalstorage() ? localStorageHelper.get('user').token : '';
+
     axios
       .get(URL, {
         headers: {
-          "Authorization": `Bearer ${user.token}`,
+          "Authorization": `Bearer ${userToken}`,
         }
       })
       .then(({ data }) => setTodayHabits(data))
