@@ -17,7 +17,6 @@ import TopContent from "./layout/TopContent";
 import Header from "./shared/Header";
 import Menu from "./shared/Menu";
 import RenderIf from './utilities/RenderIf';
-import localStorageHelper from './utilities/localStorageHelper';
 
 import axios from 'axios';
 import dayjs from 'dayjs';
@@ -27,20 +26,13 @@ const ZERO = 0;
 function History() {
   const navigate = useNavigate();
 
-  const { user, setUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
 
   const [habitsHistory, setHabitsHistory] = useState([]);
   const [selectedHabits, setSelectedHabits] = useState([]);
 
   function checkUser() {
-    if(!user.email) {
-      const userLocalStorage = localStorageHelper.get('user');
-
-      if(userLocalStorage) {
-        setUser(userLocalStorage);
-        return;
-      }
-
+    if(!user) {
       navigate('/');
     }
   }
@@ -50,14 +42,10 @@ function History() {
     
     const URL = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/history/daily";
 
-    const hasUserInLocalstorage = () => localStorageHelper.get('user') !== null;
-
-    const userToken = user.token || hasUserInLocalstorage() ? localStorageHelper.get('user').token : '';
-
     axios
       .get(URL, {
         headers: {
-          "Authorization": `Bearer ${userToken}`
+          "Authorization": `Bearer ${user.token}`
         }
       })
       .then(({ data }) => setHabitsHistory(data))

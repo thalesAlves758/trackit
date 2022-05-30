@@ -18,7 +18,6 @@ import TopContent from "./layout/TopContent";
 import MainContent from "./layout/MainContent";
 
 import getHabitsPercentage from "./utilities/getHabitsPercentage";
-import localStorageHelper from './utilities/localStorageHelper';
 
 const ZERO = 0;
 
@@ -30,25 +29,7 @@ function CompletedIcon({ done, toggleHabit }) {
 
 function TodayHabit({ id, name, done, currentSequence, highestSequence }) {
   const { user } = useContext(UserContext);
-  const { todayHabits, setTodayHabits } = useContext(TodayHabitsContext);
-
-  function updateHabit() {
-    setTodayHabits(todayHabits.map(habit => {
-      if(habit.id !== id) {
-        return habit;
-      }
-
-      const newCurrentSequence = done ? currentSequence - 1 : currentSequence + 1;
-      const newHighestSequence = newCurrentSequence > highestSequence ? newCurrentSequence : highestSequence;
-
-      return {
-        ...habit,
-        currentSequence: newCurrentSequence,
-        highestSequence: newHighestSequence,
-        done: !done,
-      };
-    }));
-  }
+  const { getTodayHabits } = useContext(TodayHabitsContext);
 
   function toggleHabit() {
     const action = done ? 'uncheck' : 'check';
@@ -61,7 +42,7 @@ function TodayHabit({ id, name, done, currentSequence, highestSequence }) {
           "Authorization": `Bearer ${user.token}`,
         }
       })
-      .then(() => updateHabit())
+      .then(() => getTodayHabits())
       .catch(err => console.log(err));
   }
 
@@ -81,18 +62,11 @@ function TodayHabit({ id, name, done, currentSequence, highestSequence }) {
 function Today() {
   const navigate = useNavigate();
 
-  const { user, setUser } = useContext(UserContext);
-  const { todayHabits, setTodayHabits } = useContext(TodayHabitsContext);
+  const { user } = useContext(UserContext);
+  const { todayHabits, getTodayHabits: getTodayHabitsFromAPI } = useContext(TodayHabitsContext);
 
   function checkUser() {
-    if(!user.email) {
-      const userLocalStorage = localStorageHelper.get('user');
-
-      if(userLocalStorage) {
-        setUser(userLocalStorage);
-        return;
-      }
-
+    if(!user) {
       navigate('/');
     }
   }
@@ -100,20 +74,7 @@ function Today() {
   useEffect(() => {
     checkUser();
 
-    const URL = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today";
-
-    const hasUserInLocalstorage = () => localStorageHelper.get('user') !== null;
-
-    const userToken = user.token || hasUserInLocalstorage() ? localStorageHelper.get('user').token : '';
-
-    axios
-      .get(URL, {
-        headers: {
-          "Authorization": `Bearer ${userToken}`,
-        }
-      })
-      .then(({ data }) => setTodayHabits(data))
-      .catch(err => console.log(err.response.data));
+    getTodayHabitsFromAPI();
   }, []);
 
   function getCurrentDate() {

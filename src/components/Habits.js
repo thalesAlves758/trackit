@@ -1,10 +1,12 @@
 import { useState, useEffect, useContext } from "react";
 import styled from 'styled-components';
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 import { ThreeDots } from  'react-loader-spinner';
 
 import UserContext from "../contexts/UserContext";
+import TodayHabitsContext from "../contexts/TodayHabitsContext";
 
 import Content from "./layout/Content";
 import Main from "./layout/Main";
@@ -19,9 +21,7 @@ import InputForm from "./layout/InputForm";
 import SecondaryButton from "./layout/SecondaryButton";
 
 import RenderIf from './utilities/RenderIf';
-import localStorageHelper from './utilities/localStorageHelper';
 import NoContentMessage from "./layout/NoContentMessage";
-import { useNavigate } from "react-router-dom";
 
 const ZERO = 0;
 
@@ -51,6 +51,7 @@ function Days({ clickable = false, selectedDays = [], handleCheck = null }) {
 
 function Habit({ id, name, days, habits, setHabits }) {
   const { user } = useContext(UserContext);
+  const { getTodayHabits } = useContext(TodayHabitsContext);
 
   const canDelete = () => window.confirm("Deseja mesmo excluir este hábito?");
 
@@ -63,7 +64,10 @@ function Habit({ id, name, days, habits, setHabits }) {
           "Authorization": `Bearer ${user.token}`,
         }
       })
-      .then(() => setHabits(habits.filter(habit => habit.id !== id)))
+      .then(() => {
+        setHabits(habits.filter(habit => habit.id !== id));
+        getTodayHabits();
+      })
       .catch(err => console.log(err.response));
   }
 
@@ -88,6 +92,7 @@ function Habit({ id, name, days, habits, setHabits }) {
 
 function NewHabitForm({ cancel, habits, setHabits, newHabit, setNewHabit, resetNewHabit }) {
   const { user } = useContext(UserContext);
+  const { getTodayHabits } = useContext(TodayHabitsContext);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -120,6 +125,7 @@ function NewHabitForm({ cancel, habits, setHabits, newHabit, setNewHabit, resetN
       })
       .then(({ data }) => {
         setHabits([...habits, data]);
+        getTodayHabits();
         resetFields();
       })
       .catch(err => alert(err.response.data.message))
@@ -170,17 +176,10 @@ function Habits() {
   const [habits, setHabits] = useState([]);
   const [newHabit, setNewHabit] = useState(initialNewHabit);
 
-  const { user, setUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
 
   function checkUser() {
-    if(!user.email) {
-      const userLocalStorage = localStorageHelper.get('user');
-
-      if(userLocalStorage) {
-        setUser(userLocalStorage);
-        return;
-      }
-
+    if(!user) {
       navigate('/');
     }
   }
@@ -190,14 +189,10 @@ function Habits() {
     
     const URL = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits";
 
-    const hasUserInLocalstorage = () => localStorageHelper.get('user') !== null;
-
-    const userToken = user.token || hasUserInLocalstorage() ? localStorageHelper.get('user').token : '';
-
     axios
       .get(URL, {
         headers: {
-          "Authorization": `Bearer ${userToken}`
+          "Authorization": `Bearer ${user.token}`
         }
       })
       .then(({ data }) => setHabits(data))
