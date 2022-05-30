@@ -20,6 +20,7 @@ import MainContent from "./layout/MainContent";
 import getHabitsPercentage from "./utilities/getHabitsPercentage";
 
 const ZERO = 0;
+const UNAUTHORIZED_CODE = 401;
 
 function CompletedIcon({ done, toggleHabit }) {
   return (
@@ -28,6 +29,8 @@ function CompletedIcon({ done, toggleHabit }) {
 }
 
 function TodayHabit({ id, name, done, currentSequence, highestSequence }) {
+  const navigate = useNavigate();
+
   const { user } = useContext(UserContext);
   const { getTodayHabits } = useContext(TodayHabitsContext);
 
@@ -43,7 +46,11 @@ function TodayHabit({ id, name, done, currentSequence, highestSequence }) {
         }
       })
       .then(() => getTodayHabits())
-      .catch(err => console.log(err));
+      .catch(err => {
+        if(err.response.status === UNAUTHORIZED_CODE) {
+          navigate('/');
+        }
+      });
   }
 
   return (

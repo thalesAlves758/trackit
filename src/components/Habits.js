@@ -24,6 +24,7 @@ import RenderIf from './utilities/RenderIf';
 import NoContentMessage from "./layout/NoContentMessage";
 
 const ZERO = 0;
+const UNAUTHORIZED_CODE = 401;
 
 function Day({ clickable = false, selected, name, index, handleCheck = null }) {
   return (
@@ -50,6 +51,8 @@ function Days({ clickable = false, selectedDays = [], handleCheck = null }) {
 }
 
 function Habit({ id, name, days, habits, setHabits }) {
+  const navigate = useNavigate();
+  
   const { user } = useContext(UserContext);
   const { getTodayHabits } = useContext(TodayHabitsContext);
 
@@ -68,7 +71,11 @@ function Habit({ id, name, days, habits, setHabits }) {
         setHabits(habits.filter(habit => habit.id !== id));
         getTodayHabits();
       })
-      .catch(err => console.log(err.response));
+      .catch(err => {
+        if(err.response.status === UNAUTHORIZED_CODE) {
+          navigate('/');
+        }
+      });
   }
 
   function handleClick() {
@@ -196,7 +203,11 @@ function Habits() {
         }
       })
       .then(({ data }) => setHabits(data))
-      .catch(err => console.log(err.response));
+      .catch(err => {
+        if(err.response.status === UNAUTHORIZED_CODE) {
+          navigate('/');
+        }
+      });
   }, []);
 
   function getHabits() {

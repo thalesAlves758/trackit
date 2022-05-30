@@ -22,6 +22,7 @@ import axios from 'axios';
 import dayjs from 'dayjs';
 
 const ZERO = 0;
+const UNAUTHORIZED_CODE = 401;
 
 function History() {
   const navigate = useNavigate();
@@ -49,7 +50,11 @@ function History() {
         }
       })
       .then(({ data }) => setHabitsHistory(data))
-      .catch(err => console.log(err));
+      .catch(err => {
+        if(err.response.status === UNAUTHORIZED_CODE) {
+          navigate('/');
+        }
+      });
   }, []);
 
   const hasDate = date => habitsHistory.some(habit => habit.day === dayjs(date).format("DD/MM/YYYY"));
