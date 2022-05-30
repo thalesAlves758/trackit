@@ -109,7 +109,7 @@ function History() {
           </TopContent>
 
           <MainContent>
-            <Calendar formatDay={getDay} onClickDay={handleClickDay} />
+            <Calendar formatDay={getDay} onClickDay={handleClickDay} className="calendar" />
           </MainContent>
         </Content>
       </Main>

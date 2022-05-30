@@ -20,3 +20,8 @@ body {
   font-family: 'Lexend Deca', sans-serif;
   background-color: var(--white);
 }
+
+.calendar {
+  border-radius: 10px;
+  border: none;
+}
