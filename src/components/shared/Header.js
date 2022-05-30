@@ -1,15 +1,29 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import UserContext from '../../contexts/UserContext';
 
 function Header() {
-  const { user: { image } } = useContext(UserContext);
+  const navigate = useNavigate();
+
+  const { user } = useContext(UserContext);
+  
+  const [userImage, setUserImage] = useState('');
+
+  useEffect(() => {
+    if(!user) {
+      navigate('/');
+      return;
+    }
+
+    setUserImage(user.image);
+  }, []);
 
   return (
     <HeaderContainer>
       <h1>TrackIt</h1>
-      <img src={image} alt="Foto de perfil" />
+      <img src={userImage} alt="Foto de perfil" />
     </HeaderContainer>
   );
 }

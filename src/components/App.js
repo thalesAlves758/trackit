@@ -20,11 +20,13 @@ function App() {
 
   function getTodayHabits() {
     const URL = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today";
+
+    const token = user ? user.token : '';
     
     axios
       .get(URL, {
         headers: {
-          "Authorization": `Bearer ${user.token}`,
+          "Authorization": `Bearer ${token}`,
         }
       })
       .then(({ data }) => setTodayHabits(data))
