@@ -52,7 +52,7 @@ function Days({ clickable = false, selectedDays = [], handleCheck = null }) {
 
 function Habit({ id, name, days, habits, setHabits }) {
   const navigate = useNavigate();
-  
+
   const { user } = useContext(UserContext);
   const { getTodayHabits } = useContext(TodayHabitsContext);
 
@@ -139,10 +139,14 @@ function NewHabitForm({ cancel, habits, setHabits, newHabit, setNewHabit, resetN
       .finally(() => setIsLoading(false));
   }
 
+  const canSubmit = () => newHabit.days.length !== ZERO;
+
   function handleSubmit(event) {
     event.preventDefault();
-    
-    createHabit();
+
+    if(canSubmit()) {
+      createHabit();
+    }
   }
 
   return (
