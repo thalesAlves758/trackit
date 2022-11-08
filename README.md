@@ -1,70 +1,52 @@
-# Getting Started with Create React App
+# <p align = "center"> Trackit </p>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<!-- <p align="center">
 
-## Available Scripts
+<img src="https://user-images.githubusercontent.com/72531277/178094665-f46c6a55-c821-42a0-bb9c-d5dd5f2d69fa.png"/>
 
-In the project directory, you can run:
+</p> -->
 
-### `npm start`
+<p align = "center">
+	<img src="https://img.shields.io/badge/author-Thales Alves-4dae71?style=flat-square" />
+	<img src="https://img.shields.io/github/languages/count/thalesAlves758/trackit?color=4dae71&style=flat-square" />
+</p>
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## :clipboard: Descrição
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Trackit é uma aplicação de acompanhamento de hábitos, com direito a cadastro e login. Quando logado, é possível criar hábitos, inserindo nome e em quais dias normalmente ele é realizado, é possível visualizar os hábitos para o dia atual, podendo marcar e desmarcar como concluído, refletindo diretamente na barra de progresso inferior, e é possível também visualizar um calendário contendo o histórico de hábitos já concluídos ou não.
 
-### `npm test`
+---
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## :computer: Tecnologias e Conceitos
 
-### `npm run build`
+- React
+- React Hooks
+- Context API
+- JWT token
+- Axios
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+---
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 🏁 Rodando a aplicação
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Este projeto foi inicializado com o [Create React App](https://github.com/facebook/create-react-app), então certifique-se que voce tem a ultima versão estável do [Node.js](https://nodejs.org/en/download/) e [npm](https://www.npmjs.com/) rodando localmente.
 
-### `npm run eject`
+Primeiro, faça o clone desse repositório na sua maquina:
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```
+git clone https://github.com/thalesAlves758/trackit.git
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Depois, dentro da pasta, rode o seguinte comando para instalar as dependencias:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+```
+npm install
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Finalizado o processo, é só inicializar o servidor:
 
-## Learn More
+```
+npm start
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+E prontinho, o projeto está rodando localmente na sua máquina.
