@@ -49,4 +49,4 @@ Finalizado o processo, é só inicializar o servidor:
 npm start
 ```
 
-E prontinho, o projeto estara rodando localmente na sua máquina.
+E prontinho, o projeto estará rodando localmente na sua máquina.
